@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body,
+html {
+  width: 100%;
+  min-height: 100vh;
+}
+
+:root {
+  --black: #18181c;
+  --yellow: #f9be03;
+  --blue: #036ac9;
+  --white: #ffffff;
+  --padding-5: 5rem;
+  --l-font: 2rem;
+  --m-font: 1.5rem;
+  --s-font: 1rem;
+  --xs-font: 0.8rem;
+}
+
+.FLEX-CENTER {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.FLEX-BETWEEN {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.FLEX-AROUND {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.FLEX-COLUMN {
+  display: flex;
+  flex-direction: column;
+}
+
+.FLEX {
+  display: flex;
+}
+
+.TEXT-CENTER {
+  text-align: center;
+}
+
+.HEADER-SMALL {
+  font-size: var(--m-font);
+  font-weight: 900;
+  color: var(--blue);
+  word-spacing: 0.5rem;
+}
+
+.P-SMALL {
+  font-size: var(--s-font);
+  font-weight: 400;
+  color: var(--black);
+}
+
+.M-TOP-1 {
+  margin-top: 1rem;
+}
+
+.M-TOP-2 {
+  margin-top: 2rem;
+}
+
+.WARNING-MESSAGE {
+  color: red;
+}
+
+.P-HIGHLIGHT {
+  font-weight: bolder;
+}
+
+@media (max-width: 800px) {
+  :root {
+    --l-font: 1.5rem;
+    --m-font: 1rem;
+    --s-font: 0.8rem;
+    --xs-font: 0.6rem;
+    --padding-5: 2rem;
+  }
+}
+
+@media (max-width: 500px) {
+  :root {
+    --l-font: 1.3rem;
+    --m-font: 1rem;
+    --s-font: 0.7rem;
+    --xs-font: 0.5rem;
+    --padding-5: 1.5rem;
+  }
+}
