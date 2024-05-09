@@ -1,6 +1,7 @@
-<script setup></script>
+<script setup>
+</script>
 
-<template class="test">
+<template>
   <body class="opening-message-body FLEX-COLUMN">
     <img class="bsit-202-logo" src="/BSIT202LOGO.png" alt="logo" />
     <div class="about-bsit-202">
@@ -49,7 +50,7 @@
       <input type="checkbox" />
       <p>I read the terms and conditions</p>
     </div>
-    <button class="proceed M-TOP-1">Proceed to chat</button>
+    <button @click="$emit('handleClick')" class="proceed M-TOP-1">Proceed to chat</button>
   </body>
 </template>
 
