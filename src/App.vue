@@ -2,8 +2,8 @@
 import OpeningMessage from './components/OpeningMessage.vue';
 import ChatPage from './pages/ChatPage.vue';
 import {ref} from 'vue'
-const display = ref(true);
-const displayChat = ref(false);
+const display = ref(false);
+const displayChat = ref(true);
 const handleClick = () => {
     display.value = false
     displayChat.value = true;

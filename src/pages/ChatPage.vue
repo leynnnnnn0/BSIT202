@@ -1,61 +1,54 @@
 <script setup>
-import {reactive} from 'vue'
+import { reactive, onMounted, ref } from 'vue'
+import db from '../db/firebaseConfig.js'
+import {getDocs, collection, doc, addDoc} from 'firebase/firestore'
 
-const chats = reactive(
-    [
-    {
-        username: "burnok",
-        chat: "Hello guys welcome back to my youtube channel i hope you enjoy my videos"
-    },
-    {
-        username: "koopal",
-        chat: "fuck you"
-    },
-    {
-        username: "love",
-        chat: "chill guys"
-    }
-    ]
-)
-    
-
-const myChats = reactive([
-
-])
-
-const handleSubmit = () => {
-    myChats.push({
-        username: "unknown",
-        chat: "test"
-    })
+// array of chats from the databse
+const chatsList = ref([]);
+// Function to get all the chats from the database
+const fetchChats = async () => {
+  chatsList.value = [];
+  let chatsCollection = await getDocs(collection(db, 'chats'))
+  chatsCollection.forEach(chat => {
+    chatsList.value.push(chat.data())
+   }) 
 }
+onMounted(fetchChats());
 
-
-
-
+const myChat = ref({
+  username: "unknown",
+  chat: ""
+});
+// handling send button
+const handleSubmit = async  () => {
+  await addDoc(collection(db, 'chats'), myChat.value).then(res => console.log(res));
+  fetchChats();
+}
 </script>
 
 <template>
   <body class="chat-page-body FLEX-CENTER">
     <div class="chat-box PADDING-2 FLEX-COLUMN">
       <div class="logo-area FLEX-CENTER">
-        <img src="/public/BSIT202LOGO.png" />
+        <img src="/BSIT202LOGO.png" />
       </div>
       <p class="welcome">Welcome to chat</p>
       <div class="chats FLEX-COLUMN">
         <div class="userchat">
-            <p class="username">Unknown</p>
-            <p class="chat">Hello guys welcome back to my youtube channel i hope you enjoy my videos</p>
+          <p class="username">Unknown</p>
+          <p class="chat">
+            Hello guys welcome back to my youtube channel i hope you enjoy my videos
+          </p>
         </div>
         <p class="chat chat-y">hello</p>
-        <div class="userchat" v-for="(chat, index) in chats" :key="index">
-            <p class="username">{{chat.username}}</p>
-            <p class="chat">{{chat.chat}}</p>
+        <div class="userchat" v-for="(chat, index) in chatsList" :key="index">
+          <p class="username">{{ chat.username }}</p>
+          <p class="chat">{{ chat.chat }}</p>
         </div>
-        <p class="chat chat-y" v-for="chat in myChats">{{ chat.chat }}</p>
+        <!-- <p class="chat chat-y" v-for="chat in myChats">{{ chat.chat }}</p> -->
       </div>
       <form class="form-area FLEX-CENTER" @submit.prevent="handleSubmit">
-        <input type="text" placeholder="chat"/>
+        <input type="text" placeholder="chat" v-model="myChat.chat" />
         <button class="submit P-SMALL" type="submit">Send</button>
       </form>
     </div>
@@ -84,14 +77,14 @@ const handleSubmit = () => {
 }
 
 .user-chat {
-    margin-top: 0.5rem;
-    width: fit-content;
+  margin-top: 0.5rem;
+  width: fit-content;
 }
 
 .chats {
-    height: 100%;
-    max-height: 500px;
-    overflow-y: scroll;
+  height: 100%;
+  max-height: 500px;
+  overflow-y: scroll;
 }
 
 .chat {
@@ -117,33 +110,33 @@ const handleSubmit = () => {
 }
 
 .username {
-    font-size: 10px;
+  font-size: 10px;
 }
 
 .form-area {
-    margin-top: 1rem;
-    display: flex;
+  margin-top: 1rem;
+  display: flex;
 }
 
 input {
-    padding: 0.5rem;
-    border-radius: 10px;
-    border: 2px solid var(--blue);
-    width: 100%;
+  padding: 0.5rem;
+  border-radius: 10px;
+  border: 2px solid var(--blue);
+  width: 100%;
 }
 
 .submit {
-    background: var(--blue);
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 10px;
-    margin-left: 0.5rem;
-    cursor: pointer;
-    transition: ease 0.5s;
+  background: var(--blue);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  transition: ease 0.5s;
 }
 
 .submit:hover {
-    background: var(--yellow);
+  background: var(--yellow);
 }
 </style>
