@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import db from '../db/firebaseConfig.js'
 import {getDocs, collection, addDoc} from 'firebase/firestore'
 
@@ -13,9 +13,10 @@ const fetchChats = async () => {
   chatsCollection.forEach(chat => {
     chatsList.value.push(chat.data())
    }) 
-   console.log(chatsList.value);
 }
-onMounted(fetchChats());
+onBeforeMount( () => {
+  fetchChats();
+});
 
 const myChat = ref({
   username: "unknown",
