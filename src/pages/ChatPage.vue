@@ -1,10 +1,11 @@
 <script setup>
-import { reactive, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import db from '../db/firebaseConfig.js'
-import {getDocs, collection, doc, addDoc} from 'firebase/firestore'
+import {getDocs, collection, addDoc} from 'firebase/firestore'
 
 // array of chats from the databse
 const chatsList = ref([]);
+const isSending = ref(false);
 // Function to get all the chats from the database
 const fetchChats = async () => {
   chatsList.value = [];
@@ -12,6 +13,7 @@ const fetchChats = async () => {
   chatsCollection.forEach(chat => {
     chatsList.value.push(chat.data())
    }) 
+   console.log(chatsList.value);
 }
 onMounted(fetchChats());
 
@@ -21,8 +23,17 @@ const myChat = ref({
 });
 // handling send button
 const handleSubmit = async  () => {
-  await addDoc(collection(db, 'chats'), myChat.value).then(res => console.log(res));
-  fetchChats();
+  if(myChat.value.chat) {
+    try {
+      isSending.value = true;
+      await addDoc(collection(db, 'chats'), myChat.value);
+      myChat.value.chat = "";
+      isSending.value = false;
+      fetchChats();
+    }catch(e) {
+      console.log(e);
+    }
+  }
 }
 </script>
 
@@ -34,22 +45,14 @@ const handleSubmit = async  () => {
       </div>
       <p class="welcome">Welcome to chat</p>
       <div class="chats FLEX-COLUMN">
-        <div class="userchat">
-          <p class="username">Unknown</p>
-          <p class="chat">
-            Hello guys welcome back to my youtube channel i hope you enjoy my videos
-          </p>
-        </div>
-        <p class="chat chat-y">hello</p>
         <div class="userchat" v-for="(chat, index) in chatsList" :key="index">
           <p class="username">{{ chat.username }}</p>
           <p class="chat">{{ chat.chat }}</p>
         </div>
-        <!-- <p class="chat chat-y" v-for="chat in myChats">{{ chat.chat }}</p> -->
       </div>
       <form class="form-area FLEX-CENTER" @submit.prevent="handleSubmit">
         <input type="text" placeholder="chat" v-model="myChat.chat" />
-        <button class="submit P-SMALL" type="submit">Send</button>
+        <button class="submit P-SMALL" type="submit" :disabled="isSending">{{isSending ? "Sending" : "Send"}}</button>
       </form>
     </div>
   </body>
